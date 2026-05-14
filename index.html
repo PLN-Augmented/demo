@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLN Augmented — Vidéo Augmentée & Expérimentations Numériques</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: linear-gradient(135deg, #000 0%, #0a0a1a 100%);
+            color: #fff; 
+            font-family: 'Inter', system-ui, sans-serif; 
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #00d4ff;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+        
+        nav a:hover { color: #00d4ff; }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #000 0%, #0a0a2e 50%, #16213e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: #00d4ff;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            color: #ccc;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #000;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Sections */
+        section {
+            padding: 120px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        section:nth-child(even) {
+            background: #0a0a1a;
+        }
+        
+        section:nth-child(odd) {
+            background: #000;
+        }
+        
+        section h2 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            font-size: 1.2rem;
+            color: #aaa;
+            line-height: 1.8;
+        }
+        
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .portfolio-item {
+            background: #111;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .portfolio-item:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .portfolio-item-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 100, 200, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            overflow: hidden;
+        }
+        
+        .portfolio-item-content {
+            padding: 1.5rem;
+        }
+        
+        .portfolio-item-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #00d4ff;
+        }
+        
+        .portfolio-item-desc {
+            font-size: 0.95rem;
+            color: #999;
+            line-height: 1.6;
+        }
+        
+        /* Expertise Section */
+        .expertise-list {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            line-height: 2.5;
+        }
+        
+        .expertise-list li {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+            color: #ddd;
+        }
+        
+        .expertise-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00d4ff;
+            font-size: 1.5rem;
+        }
+        
+        /* Lab Section */
+        .lab-card {
+            background: #111;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        
+        .lab-card h3 {
+            font-size: 1.8rem;
+            color: #00d4ff;
+            margin-bottom: 1rem;
+        }
+        
+        .lab-card p {
+            font-size: 1.1rem;
+            color: #aaa;
+            line-height: 1.8;
+        }
+        
+        /* Contact Section */
+        .contact-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .contact-wrapper p {
+            font-size: 1.1rem;
+            color: #aaa;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .contact-link {
+            display: inline-block;
+            color: #00d4ff;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .contact-link:hover {
+            opacity: 0.8;
+        }
+        
+        /* Footer */
+        footer {
+            background: #000;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            padding: 3rem 5%;
+            text-align: center;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+            section { padding: 60px 5%; }
+            section h2 { font-size: 2rem; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <div class="nav-logo">🚀 PLN Augmented</div>
+        <ul>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#expertise">Expertise</a></li>
+            <li><a href="#lab">Laboratoire</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">PLN Augmented</h1>
+            <p class="hero-subtitle">Vidéo Augmentée & Expérimentations Numériques</p>
+            <p class="hero-description">
+                Démonstration de savoir-faire en création de contenus audiovisuels innovants :
+                vidéo augmentée, motion design génératif, intégration de données en visuel.
+            </p>
+            <button class="cta-button" onclick="document.getElementById('portfolio').scrollIntoView({behavior: 'smooth'})">Découvrir le portfolio</button>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section id="portfolio">
+        <h2>Portfolio</h2>
+        <p class="section-subtitle">
+            Explorez nos expérimentations et réalisations en vidéo augmentée et motion design
+        </p>
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <div class="portfolio-item-image">🎬</div>
+                <div class="portfolio-item-content">
+                    <div class="portfolio-item-title">Vidéo Augmentée</div>
+                    <div class="portfolio-item-desc">Superposition de couches visuelles et interactives pour enrichir l'expérience vidéo</div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-item-image">✨</div>
+                <div class="portfolio-item-content">
+                    <div class="portfolio-item-title">Motion Design Génératif</div>
+                    <div class="portfolio-item-desc">Animations créées par algorithmes, combinant art et intelligence artificielle</div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-item-image">📊</div>
+                <div class="portfolio-item-content">
+                    <div class="portfolio-item-title">Data Visualization</div>
+                    <div class="portfolio-item-desc">Transformation de données complexes en visualisations narratives et captivantes</div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-item-image">🎨</div>
+                <div class="portfolio-item-content">
+                    <div class="portfolio-item-title">Design Interactif</div>
+                    <div class="portfolio-item-desc">Expériences immersives combinant vidéo, interaction et éléments 3D</div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-item-image">🔎</div>
+                <div class="portfolio-item-content">
+                    <div class="portfolio-item-title">Expérimentations IA</div>
+                    <div class="portfolio-item-desc">Exploration de nouvelles possibilités avec machine learning et réseaux de neurones</div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-item-image">🌐</div>
+                <div class="portfolio-item-content">
+                    <div class="portfolio-item-title">Web Experiences</div>
+                    <div class="portfolio-item-desc">Intégration vidéo sur web avec animations et interactivité avancées</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERTISE -->
+    <section id="expertise">
+        <h2>Expertise & Savoir-faire</h2>
+        <p class="section-subtitle">Notre approche combine créativité, technologie et innovation</p>
+        <ul class="expertise-list">
+            <li>Vidéo augmentée & réalité interactive</li>
+            <li>Motion design génératif assisté par IA</li>
+            <li>Intégration de données en visualisations</li>
+            <li>Expérimentations numériques innovantes</li>
+            <li>Post-production assistée par intelligence artificielle</li>
+            <li>Web experiences immersives et interactives</li>
+        </ul>
+    </section>
+
+    <!-- LABORATOIRE -->
+    <section id="lab">
+        <h2>Laboratoire d'Expérimentations</h2>
+        <p class="section-subtitle">Espace de recherche et développement pour les formats de demain</p>
+        <div class="lab-card">
+            <h3>🔬 Workflow Innovant</h3>
+            <p>
+                Nous testons et développons continuellement de nouveaux formats, techniques et outils.
+                Chaque expérimentation repousse les limites de ce qui est possible en audiovisuel numérique.
+            </p>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <h2>Collaborons</h2>
+        <div class="contact-wrapper">
+            <p>
+                Vous avez un projet audiovisuel innovant ? Parlons de vos ambitions et explorons
+                ensemble comment la technologie peut amplifier votre vision créative.
+            </p>
+            <a href="mailto:contact@plnaugmented.dev" class="contact-link">
+                📧 contact@plnaugmented.dev
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 PLN Augmented — Démonstration de savoir-faire en vidéo augmentée et expérimentations numériques</p>
+    </footer>
+
+</body>
+</html>
